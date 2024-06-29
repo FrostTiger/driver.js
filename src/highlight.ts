@@ -29,7 +29,18 @@ function mountDummyElement(): Element {
 
 export function highlight(step: DriveStep) {
   const { element } = step;
+  const { parent } = step;
   let elemObj = typeof element === "string" ? document.querySelector(element) : element;
+
+  if (typeof element === "string") {
+    if (parent == undefined) {
+      elemObj = document.querySelector(element)
+    } else {
+      elemObj = parent.querySelector(element)
+    }
+  } else {
+    elemObj = element;
+  }
 
   // If the element is not found, we mount a 1px div
   // at the center of the screen to highlight and show
@@ -62,6 +73,7 @@ function transferHighlight(toElement: Element, toStep: DriveStep) {
 
   const fromStep = getState("__activeStep");
   const fromElement = getState("__activeElement") || toElement;
+
 
   // If it's the first time we're highlighting an element, we show
   // the popover immediately. Otherwise, we wait for the animation

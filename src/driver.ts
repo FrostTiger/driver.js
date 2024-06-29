@@ -13,6 +13,7 @@ export type DriveStep = {
   onHighlighted?: DriverHook;
   onDeselected?: DriverHook;
   popover?: Popover;
+  parent?: HTMLElement;
 };
 
 export function driver(options: Config = {}) {
@@ -191,22 +192,22 @@ export function driver(options: Config = {}) {
         onNextClick: onNextClick
           ? onNextClick
           : () => {
-              if (!hasNextStep) {
-                destroy();
-              } else {
-                drive(stepIndex + 1);
-              }
-            },
+            if (!hasNextStep) {
+              destroy();
+            } else {
+              drive(stepIndex + 1);
+            }
+          },
         onPrevClick: onPrevClick
           ? onPrevClick
           : () => {
-              drive(stepIndex - 1);
-            },
+            drive(stepIndex - 1);
+          },
         onCloseClick: onCloseClick
           ? onCloseClick
           : () => {
-              destroy();
-            },
+            destroy();
+          },
         ...(currentStep?.popover || {}),
       },
     });
@@ -316,11 +317,11 @@ export function driver(options: Config = {}) {
         ...step,
         popover: step.popover
           ? {
-              showButtons: [],
-              showProgress: false,
-              progressText: "",
-              ...step.popover!,
-            }
+            showButtons: [],
+            showProgress: false,
+            progressText: "",
+            ...step.popover!,
+          }
           : undefined,
       });
     },

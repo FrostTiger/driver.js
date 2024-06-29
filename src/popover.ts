@@ -63,9 +63,14 @@ export function renderPopover(element: Element, step: DriveStep) {
   if (popover) {
     document.body.removeChild(popover.wrapper);
   }
-
+  const { parent } = step;
   popover = createPopover();
-  document.body.appendChild(popover.wrapper);
+  if (parent == undefined) {
+    document.body.appendChild(popover.wrapper);
+  } else {
+    parent.appendChild(popover.wrapper);
+  }
+
 
   const {
     title,
