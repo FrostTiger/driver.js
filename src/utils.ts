@@ -55,8 +55,8 @@ function isElementInView(element: Element) {
   return (
     rect.top >= 0 &&
     rect.left >= 0 &&
-    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    rect.bottom <= (window.parent.innerHeight || window.parent.document.documentElement.clientHeight) &&
+    rect.right <= (window.parent.innerWidth || window.parent.document.documentElement.clientWidth)
   );
 }
 

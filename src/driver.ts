@@ -126,7 +126,7 @@ export function driver(options: Config = {}) {
     }
 
     setState("isInitialized", true);
-    document.body.classList.add("driver-active", getConfig("animate") ? "driver-fade" : "driver-simple");
+    window.parent.document.body.classList.add("driver-active", getConfig("animate") ? "driver-fade" : "driver-simple");
 
     initEvents();
 
@@ -150,7 +150,7 @@ export function driver(options: Config = {}) {
       return;
     }
 
-    setState("__activeOnDestroyed", document.activeElement as HTMLElement);
+    setState("__activeOnDestroyed", window.parent.document.activeElement as HTMLElement);
     setState("activeIndex", stepIndex);
 
     const currentStep = steps[stepIndex];
@@ -235,7 +235,7 @@ export function driver(options: Config = {}) {
     const onDeselected = activeStep?.onDeselected || getConfig("onDeselected");
     const onDestroyed = getConfig("onDestroyed");
 
-    document.body.classList.remove("driver-active", "driver-fade", "driver-simple");
+    window.parent.document.body.classList.remove("driver-active", "driver-fade", "driver-simple");
 
     destroyEvents();
     destroyPopover();

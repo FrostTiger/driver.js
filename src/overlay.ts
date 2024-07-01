@@ -67,15 +67,15 @@ export function refreshOverlay() {
     return;
   }
 
-  const windowX = window.innerWidth;
-  const windowY = window.innerHeight;
+  const windowX = window.parent.innerWidth;
+  const windowY = window.parent.innerHeight;
 
   overlaySvg.setAttribute("viewBox", `0 0 ${windowX} ${windowY}`);
 }
 
 function mountOverlay(stagePosition: StageDefinition) {
   const overlaySvg = createOverlaySvg(stagePosition);
-  document.body.appendChild(overlaySvg);
+  window.parent.document.body.appendChild(overlaySvg);
 
   onDriverClick(overlaySvg, e => {
     const target = e.target as SVGElement;
@@ -108,10 +108,10 @@ function renderOverlay(stagePosition: StageDefinition) {
 }
 
 function createOverlaySvg(stage: StageDefinition): SVGSVGElement {
-  const windowX = window.innerWidth;
-  const windowY = window.innerHeight;
+  const windowX = window.parent.innerWidth;
+  const windowY = window.parent.innerHeight;
 
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  const svg = window.parent.document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.classList.add("driver-overlay", "driver-overlay-animated");
 
   svg.setAttribute("viewBox", `0 0 ${windowX} ${windowY}`);
@@ -131,7 +131,8 @@ function createOverlaySvg(stage: StageDefinition): SVGSVGElement {
   svg.style.width = "100%";
   svg.style.height = "100%";
 
-  const stagePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  //const stagePath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  const stagePath = window.parent.document.createElementNS("http://www.w3.org/2000/svg", "path");
 
   stagePath.setAttribute("d", generateStageSvgPathString(stage));
 
@@ -146,8 +147,8 @@ function createOverlaySvg(stage: StageDefinition): SVGSVGElement {
 }
 
 function generateStageSvgPathString(stage: StageDefinition) {
-  const windowX = window.innerWidth;
-  const windowY = window.innerHeight;
+  const windowX = window.parent.innerWidth;
+  const windowY = window.parent.innerHeight;
 
   const stagePadding = getConfig("stagePadding") || 0;
   const stageRadius = getConfig("stageRadius") || 0;

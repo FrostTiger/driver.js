@@ -39,11 +39,11 @@ function trapFocus(e: KeyboardEvent) {
 
   if (e.shiftKey) {
     const previousFocusableEl =
-      focusableEls[focusableEls.indexOf(document.activeElement as HTMLElement) - 1] || lastFocusableEl;
+      focusableEls[focusableEls.indexOf(window.parent.document.activeElement as HTMLElement) - 1] || lastFocusableEl;
     previousFocusableEl?.focus();
   } else {
     const nextFocusableEl =
-      focusableEls[focusableEls.indexOf(document.activeElement as HTMLElement) + 1] || firstFocusableEl;
+      focusableEls[focusableEls.indexOf(window.parent.document.activeElement as HTMLElement) + 1] || firstFocusableEl;
     nextFocusableEl?.focus();
   }
 }
@@ -98,13 +98,13 @@ export function onDriverClick(
   const useCapture = true;
 
   // Events to disable
-  document.addEventListener("pointerdown", listenerWrapper, useCapture);
-  document.addEventListener("mousedown", listenerWrapper, useCapture);
-  document.addEventListener("pointerup", listenerWrapper, useCapture);
-  document.addEventListener("mouseup", listenerWrapper, useCapture);
+  window.parent.document.addEventListener("pointerdown", listenerWrapper, useCapture);
+  window.parent.document.addEventListener("mousedown", listenerWrapper, useCapture);
+  window.parent.document.addEventListener("pointerup", listenerWrapper, useCapture);
+  window.parent.document.addEventListener("mouseup", listenerWrapper, useCapture);
 
   // Actual click handler
-  document.addEventListener(
+  window.parent.document.addEventListener(
     "click",
     e => {
       listenerWrapper(e, listener);

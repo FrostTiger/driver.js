@@ -6,12 +6,12 @@ import { bringInView } from "./utils";
 import { getState, setState } from "./state";
 
 function mountDummyElement(): Element {
-  const existingDummy = document.getElementById("driver-dummy-element");
+  const existingDummy = window.parent.document.getElementById("driver-dummy-element");
   if (existingDummy) {
     return existingDummy;
   }
 
-  let element = document.createElement("div");
+  let element = window.parent.document.createElement("div");
 
   element.id = "driver-dummy-element";
   element.style.width = "0";
@@ -22,7 +22,7 @@ function mountDummyElement(): Element {
   element.style.top = "50%";
   element.style.left = "50%";
 
-  document.body.appendChild(element);
+  window.parent.document.body.appendChild(element);
 
   return element;
 }
@@ -30,14 +30,10 @@ function mountDummyElement(): Element {
 export function highlight(step: DriveStep) {
   const { element } = step;
   const { parent } = step;
-  let elemObj = typeof element === "string" ? document.querySelector(element) : element;
+  let elemObj = typeof element === "string" ? window.parent.document.querySelector(element) : element;
 
   if (typeof element === "string") {
-    if (parent == undefined) {
-      elemObj = document.querySelector(element)
-    } else {
-      elemObj = parent.querySelector(element)
-    }
+    elemObj = window.parent.document.querySelector(element)
   } else {
     elemObj = element;
   }
@@ -181,8 +177,8 @@ function transferHighlight(toElement: Element, toStep: DriveStep) {
 }
 
 export function destroyHighlight() {
-  document.getElementById("driver-dummy-element")?.remove();
-  document.querySelectorAll(".driver-active-element").forEach(element => {
+  window.parent.document.getElementById("driver-dummy-element")?.remove();
+  window.parent.document.querySelectorAll(".driver-active-element").forEach(element => {
     element.classList.remove("driver-active-element", "driver-no-interaction");
     element.removeAttribute("aria-haspopup");
     element.removeAttribute("aria-expanded");

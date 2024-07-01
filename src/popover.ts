@@ -61,16 +61,10 @@ export function hidePopover() {
 export function renderPopover(element: Element, step: DriveStep) {
   let popover = getState("popover");
   if (popover) {
-    document.body.removeChild(popover.wrapper);
+    window.parent.document.body.removeChild(popover.wrapper);
   }
-  const { parent } = step;
   popover = createPopover();
-  if (parent == undefined) {
-    document.body.appendChild(popover.wrapper);
-  } else {
-    parent.appendChild(popover.wrapper);
-  }
-
+  window.parent.document.body.appendChild(popover.wrapper);
 
   const {
     title,
@@ -278,7 +272,7 @@ function calculateTopForLeftRight(
     return Math.max(
       Math.min(
         elementDimensions.top - popoverPadding,
-        window.innerHeight - popoverDimensions!.realHeight - popoverArrowDimensions.width
+        window.parent.innerHeight - popoverDimensions!.realHeight - popoverArrowDimensions.width
       ),
       popoverArrowDimensions.width
     );
@@ -288,7 +282,7 @@ function calculateTopForLeftRight(
     return Math.max(
       Math.min(
         elementDimensions.top - popoverDimensions?.realHeight + elementDimensions.height + popoverPadding,
-        window.innerHeight - popoverDimensions?.realHeight - popoverArrowDimensions.width
+        window.parent.innerHeight - popoverDimensions?.realHeight - popoverArrowDimensions.width
       ),
       popoverArrowDimensions.width
     );
@@ -298,7 +292,7 @@ function calculateTopForLeftRight(
     return Math.max(
       Math.min(
         elementDimensions.top + elementDimensions.height / 2 - popoverDimensions?.realHeight / 2,
-        window.innerHeight - popoverDimensions?.realHeight - popoverArrowDimensions.width
+        window.parent.innerHeight - popoverDimensions?.realHeight - popoverArrowDimensions.width
       ),
       popoverArrowDimensions.width
     );
@@ -323,7 +317,7 @@ function calculateLeftForTopBottom(
     return Math.max(
       Math.min(
         elementDimensions.left - popoverPadding,
-        window.innerWidth - popoverDimensions!.realWidth - popoverArrowDimensions.width
+        window.parent.innerWidth - popoverDimensions!.realWidth - popoverArrowDimensions.width
       ),
       popoverArrowDimensions.width
     );
@@ -333,7 +327,7 @@ function calculateLeftForTopBottom(
     return Math.max(
       Math.min(
         elementDimensions.left - popoverDimensions?.realWidth + elementDimensions.width + popoverPadding,
-        window.innerWidth - popoverDimensions?.realWidth - popoverArrowDimensions.width
+        window.parent.innerWidth - popoverDimensions?.realWidth - popoverArrowDimensions.width
       ),
       popoverArrowDimensions.width
     );
@@ -343,7 +337,7 @@ function calculateLeftForTopBottom(
     return Math.max(
       Math.min(
         elementDimensions.left + elementDimensions.width / 2 - popoverDimensions?.realWidth / 2,
-        window.innerWidth - popoverDimensions?.realWidth - popoverArrowDimensions.width
+        window.parent.innerWidth - popoverDimensions?.realWidth - popoverArrowDimensions.width
       ),
       popoverArrowDimensions.width
     );
@@ -372,13 +366,13 @@ export function repositionPopover(element: Element, step: DriveStep) {
   const topValue = elementDimensions.top - popoverDimensions!.height;
   let isTopOptimal = topValue >= 0;
 
-  const bottomValue = window.innerHeight - (elementDimensions.bottom + popoverDimensions!.height);
+  const bottomValue = window.parent.innerHeight - (elementDimensions.bottom + popoverDimensions!.height);
   let isBottomOptimal = bottomValue >= 0;
 
   const leftValue = elementDimensions.left - popoverDimensions!.width;
   let isLeftOptimal = leftValue >= 0;
 
-  const rightValue = window.innerWidth - (elementDimensions.right + popoverDimensions!.width);
+  const rightValue = window.parent.innerWidth - (elementDimensions.right + popoverDimensions!.width);
   let isRightOptimal = rightValue >= 0;
 
   const noneOptimal = !isTopOptimal && !isBottomOptimal && !isLeftOptimal && !isRightOptimal;
@@ -395,15 +389,15 @@ export function repositionPopover(element: Element, step: DriveStep) {
   }
 
   if (requiredSide === "over") {
-    const leftToSet = window.innerWidth / 2 - popoverDimensions!.realWidth / 2;
-    const topToSet = window.innerHeight / 2 - popoverDimensions!.realHeight / 2;
+    const leftToSet = window.parent.innerWidth / 2 - popoverDimensions!.realWidth / 2;
+    const topToSet = window.parent.innerHeight / 2 - popoverDimensions!.realHeight / 2;
 
     popover.wrapper.style.left = `${leftToSet}px`;
     popover.wrapper.style.right = `auto`;
     popover.wrapper.style.top = `${topToSet}px`;
     popover.wrapper.style.bottom = `auto`;
   } else if (noneOptimal) {
-    const leftValue = window.innerWidth / 2 - popoverDimensions?.realWidth! / 2;
+    const leftValue = window.parent.innerWidth / 2 - popoverDimensions?.realWidth! / 2;
     const bottomValue = 10;
 
     popover.wrapper.style.left = `${leftValue}px`;
@@ -413,7 +407,7 @@ export function repositionPopover(element: Element, step: DriveStep) {
   } else if (isLeftOptimal) {
     const leftToSet = Math.min(
       leftValue,
-      window.innerWidth - popoverDimensions?.realWidth - popoverArrowDimensions.width
+      window.parent.innerWidth - popoverDimensions?.realWidth - popoverArrowDimensions.width
     );
 
     const topToSet = calculateTopForLeftRight(requiredAlignment, {
@@ -432,7 +426,7 @@ export function repositionPopover(element: Element, step: DriveStep) {
   } else if (isRightOptimal) {
     const rightToSet = Math.min(
       rightValue,
-      window.innerWidth - popoverDimensions?.realWidth - popoverArrowDimensions.width
+      window.parent.innerWidth - popoverDimensions?.realWidth - popoverArrowDimensions.width
     );
     const topToSet = calculateTopForLeftRight(requiredAlignment, {
       elementDimensions,
@@ -450,7 +444,7 @@ export function repositionPopover(element: Element, step: DriveStep) {
   } else if (isTopOptimal) {
     const topToSet = Math.min(
       topValue,
-      window.innerHeight - popoverDimensions!.realHeight - popoverArrowDimensions.width
+      window.parent.innerHeight - popoverDimensions!.realHeight - popoverArrowDimensions.width
     );
     let leftToSet = calculateLeftForTopBottom(requiredAlignment, {
       elementDimensions,
@@ -468,7 +462,7 @@ export function repositionPopover(element: Element, step: DriveStep) {
   } else if (isBottomOptimal) {
     const bottomToSet = Math.min(
       bottomValue,
-      window.innerHeight - popoverDimensions?.realHeight - popoverArrowDimensions.width
+      window.parent.innerHeight - popoverDimensions?.realHeight - popoverArrowDimensions.width
     );
 
     let leftToSet = calculateLeftForTopBottom(requiredAlignment, {
@@ -509,12 +503,12 @@ function renderPopoverArrow(alignment: Alignment, side: Side, element: Element) 
   const popoverArrow = popover.arrow;
 
   const popoverWidth = popoverDimensions.width;
-  const windowWidth = window.innerWidth;
+  const windowWidth = window.parent.innerWidth;
   const elementWidth = elementDimensions.width;
   const elementLeft = elementDimensions.left;
 
   const popoverHeight = popoverDimensions.height;
-  const windowHeight = window.innerHeight;
+  const windowHeight = window.parent.innerHeight;
   const elementTop = elementDimensions.top;
   const elementHeight = elementDimensions.height;
 
@@ -598,46 +592,46 @@ function renderPopoverArrow(alignment: Alignment, side: Side, element: Element) 
 }
 
 function createPopover(): PopoverDOM {
-  const wrapper = document.createElement("div");
+  const wrapper = window.parent.document.createElement("div");
   wrapper.classList.add("driver-popover");
 
-  const arrow = document.createElement("div");
+  const arrow = window.parent.document.createElement("div");
   arrow.classList.add("driver-popover-arrow");
 
-  const title = document.createElement("header");
+  const title = window.parent.document.createElement("header");
   title.id = "driver-popover-title";
   title.classList.add("driver-popover-title");
   title.style.display = "none";
   title.innerText = "Popover Title";
 
-  const description = document.createElement("div");
+  const description = window.parent.document.createElement("div");
   description.id = "driver-popover-description";
   description.classList.add("driver-popover-description");
   description.style.display = "none";
   description.innerText = "Popover description is here";
 
-  const closeButton = document.createElement("button");
+  const closeButton = window.parent.document.createElement("button");
   closeButton.type = "button";
   closeButton.classList.add("driver-popover-close-btn");
   closeButton.setAttribute("aria-label", "Close");
   closeButton.innerHTML = "&times;";
 
-  const footer = document.createElement("footer");
+  const footer = window.parent.document.createElement("footer");
   footer.classList.add("driver-popover-footer");
 
-  const progress = document.createElement("span");
+  const progress = window.parent.document.createElement("span");
   progress.classList.add("driver-popover-progress-text");
   progress.innerText = "";
 
-  const footerButtons = document.createElement("span");
+  const footerButtons = window.parent.document.createElement("span");
   footerButtons.classList.add("driver-popover-navigation-btns");
 
-  const previousButton = document.createElement("button");
+  const previousButton = window.parent.document.createElement("button");
   previousButton.type = "button";
   previousButton.classList.add("driver-popover-prev-btn");
   previousButton.innerHTML = "&larr; Previous";
 
-  const nextButton = document.createElement("button");
+  const nextButton = window.parent.document.createElement("button");
   nextButton.type = "button";
   nextButton.classList.add("driver-popover-next-btn");
   nextButton.innerHTML = "Next &rarr;";
